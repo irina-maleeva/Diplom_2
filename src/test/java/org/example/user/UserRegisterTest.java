@@ -3,6 +3,7 @@ package org.example.user;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import org.example.model.User;
+import org.junit.After;
 import org.junit.Test;
 
 import static org.example.user.UserGenerator.*;
@@ -11,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class UserRegisterTest {
 
     UserClient userClient = new UserClient();
+    String accessToken;
 
     @Test
     @DisplayName("Можно создать уникального пользователя. В ответе 'success': true. Созданный пользователь может пройти авторизацию")
@@ -19,6 +21,7 @@ public class UserRegisterTest {
         Response response = userClient.register(user);
         assertEquals(true, response.body().path("success"));
         Response loginResponse = userClient.login(user);
+        accessToken = loginResponse.body().path("accessToken").toString().substring(7);
         assertEquals(true, loginResponse.body().path("success"));
     }
 
@@ -64,5 +67,9 @@ public class UserRegisterTest {
         assertEquals("Email, password and name are required fields"
                 , response.body().path("message"));
         assertEquals(403, response.statusCode());
+    }
+    @After
+    public void cleanUp() {
+        userClient.deleteUser(accessToken);
     }
 }

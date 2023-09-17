@@ -53,4 +53,21 @@ public class UserClient extends BaseClient {
                 .when()
                 .patch(AUTHORIZATION_URL);
     }
+
+    @Step("Изменение данных пользователя без авторизации")
+    public Response changeDataWithoutAuthorization(UserData userData) {
+        return given()
+                .spec(getBaseSpec())
+                .and()
+                .body(userData)
+                .when()
+                .patch(AUTHORIZATION_URL);
+    }
+    @Step("Удаление пользователя")
+    public Response deleteUser(String accessToken) {
+        return given()
+                .header("authorization", "bearer "+ accessToken)
+                .spec(getBaseSpec())
+                .delete(AUTHORIZATION_URL);
+    }
 }
