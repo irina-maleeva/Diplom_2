@@ -17,7 +17,7 @@ public class UserLoginTest {
     @DisplayName("Существующий пользователь проходит авторизацию")
     public void testLoginExistingUser() {
         User user = randomUser();
-        Response response = userClient.register(user);
+        userClient.register(user);
         Response loginResponse = userClient.login(user);
         accessToken = loginResponse.body().path("accessToken").toString().substring(7);
         assertEquals(true, loginResponse.body().path("success"));
@@ -27,7 +27,7 @@ public class UserLoginTest {
     @DisplayName("Если email неверный, вернется код ответа 401")
     public void testLoginUserWrongEmail() {
         User correctUser = randomUser();
-        Response response = userClient.register(correctUser);
+        userClient.register(correctUser);
         User wrongEmailUser = userWithWrongEmail(correctUser);
         Response loginResponse = userClient.login(wrongEmailUser);
         assertEquals(false, loginResponse.body().path("success"));
@@ -39,7 +39,7 @@ public class UserLoginTest {
     @DisplayName("Если пароль неверный, вернется код ответа 401")
     public void testLoginUserWrongPassword() {
         User correctUser = randomUser();
-        Response response = userClient.register(correctUser);
+        userClient.register(correctUser);
         User wrongPasswordUser = userWithWrongPassword(correctUser);
         Response loginResponse = userClient.login(wrongPasswordUser);
         assertEquals(false, loginResponse.body().path("success"));

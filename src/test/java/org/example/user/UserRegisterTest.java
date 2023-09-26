@@ -29,11 +29,11 @@ public class UserRegisterTest {
     @DisplayName("Нельзя создать пользователя, который уже зарегистрировался. Код ответа 403")
     public void testCannotRegisterExistingUser() {
         User user = randomUser();
-        Response response1 = userClient.register(user);
-        Response response2 = userClient.register(user);
-        assertEquals(false, response2.body().path("success"));
-        assertEquals("User already exists", response2.body().path("message"));
-        assertEquals(403, response2.statusCode());
+        userClient.register(user);
+        Response response = userClient.register(user);
+        assertEquals(false, response.body().path("success"));
+        assertEquals("User already exists", response.body().path("message"));
+        assertEquals(403, response.statusCode());
     }
 
     @Test
